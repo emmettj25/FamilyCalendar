@@ -21,28 +21,59 @@ html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f7f6f3;
 .sync-tag { font-size: 11px; color: #bbb; font-family: 'DM Mono', monospace; margin-left: 10px; transition: color 0.3s; }
 .sync-tag.syncing { color: #5b7df5; }
 .sync-tag.error { color: #e05; }
-.cal { flex: 1; display: grid; grid-template-columns: clamp(52px,5.8vw,88px) repeat(31,1fr); grid-template-rows: clamp(22px,2.8vh,36px) repeat(8,1fr); border-radius: 10px; overflow: hidden; border: 1px solid #deddd8; min-height: 0; }
+
+.cal {
+  flex: 1; display: grid;
+  grid-template-columns: clamp(52px,5.8vw,88px) repeat(31,1fr);
+  grid-template-rows: clamp(22px,2.8vh,36px) repeat(8,1fr);
+  border-radius: 10px; overflow: hidden; border: 1px solid #deddd8; min-height: 0;
+}
 .h-label { background: #1a1a18; display: flex; align-items: center; justify-content: center; font-size: clamp(9px,.65vw,11px); font-weight: 600; letter-spacing: .1em; color: rgba(255,255,255,.5); text-transform: uppercase; }
 .h-day { background: #1a1a18; display: flex; align-items: center; justify-content: center; font-size: clamp(9px,.72vw,12px); font-weight: 500; color: rgba(255,255,255,.55); border-left: 1px solid rgba(255,255,255,.06); font-family: 'DM Mono', monospace; }
 .h-day.wknd { color: rgba(255,255,255,.22); }
 .m-label { background: #f2f1ed; border-top: 1px solid #deddd8; border-right: 2px solid #c8c7c1; padding: clamp(4px,.6vh,10px) clamp(4px,.5vw,10px); display: flex; flex-direction: column; justify-content: center; gap: 2px; }
 .m-name { font-size: clamp(12px,1.35vw,20px); font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
 .m-meta { font-size: clamp(9px,.65vw,11px); color: #b0afa8; font-family: 'DM Mono', monospace; line-height: 1; }
-.day { border-top: 1px solid #e8e7e2; border-left: 1px solid #e8e7e2; padding: clamp(3px,.4vh,6px) clamp(2px,.3vw,5px); display: flex; flex-direction: column; cursor: pointer; position: relative; overflow: hidden; transition: background 0.08s; background: #faf9f6; min-height: 0; }
+
+.day {
+  border-top: 1px solid #e8e7e2; border-left: 1px solid #e8e7e2;
+  padding: clamp(2px,.3vh,4px) clamp(2px,.25vw,4px);
+  display: flex; flex-direction: column; cursor: pointer;
+  position: relative; overflow: hidden;
+  transition: background 0.08s; background: #faf9f6; min-height: 0;
+}
 .day:hover { background: #eeecff !important; z-index: 2; }
 .day.wknd { background: #f4f3ef; }
 .day.today { background: #e6eeff !important; border-color: #5b7df5 !important; }
 .day.past { background: #f9f9f7; }
 .day.empty { background: #f0efeb; cursor: default; pointer-events: none; }
 .day.selected { outline: 2px solid #5b7df5; outline-offset: -2px; z-index: 3; }
-.dn { font-size: clamp(9px,.82vw,13px); font-weight: 600; color: #2a2a28; line-height: 1; font-family: 'DM Mono', monospace; }
+
+.day-top { display: flex; align-items: baseline; gap: 2px; flex-shrink: 0; margin-bottom: 1px; }
+.dn { font-size: clamp(8px,.75vw,12px); font-weight: 600; color: #2a2a28; line-height: 1; font-family: 'DM Mono', monospace; flex-shrink: 0; }
 .day.today .dn { color: #3d5be8; }
 .day.past .dn { color: #b0afa8; }
 .day.empty .dn { display: none; }
-.dw { font-size: clamp(8px,.56vw,10px); color: #c0bfb8; line-height: 1; margin-top: 1px; margin-bottom: 3px; }
-.today-pip { position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; background: #3d5be8; border-radius: 50%; }
-.dots { display: flex; flex-wrap: wrap; gap: 2px; align-content: flex-start; }
-.dot { width: clamp(4px,.38vw,6px); height: clamp(4px,.38vw,6px); border-radius: 50%; flex-shrink: 0; }
+.dw { font-size: clamp(7px,.5vw,9px); color: #c0bfb8; line-height: 1; flex-shrink: 0; }
+.today-pip { position: absolute; top: 2px; right: 2px; width: 4px; height: 4px; background: #3d5be8; border-radius: 50%; }
+
+/* Event labels — the key change */
+.ev-labels { display: flex; flex-direction: column; gap: 1px; overflow: hidden; flex: 1; min-height: 0; }
+.ev-label {
+  font-size: clamp(6px,.55vw,9px);
+  font-weight: 500;
+  line-height: 1.15;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 1px 2px;
+  border-radius: 2px;
+  width: 100%;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* Panel */
 #panel { position: fixed; bottom: 20px; right: 20px; width: 290px; background: #fff; border: 1px solid #e0dfd8; border-radius: 14px; padding: 18px 18px 16px; display: none; box-shadow: 0 8px 32px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06); z-index: 200; }
 .p-close { position: absolute; top: 12px; right: 14px; font-size: 20px; cursor: pointer; color: #bbb; background: none; border: none; font-family: inherit; line-height: 1; }
 .p-close:hover { color: #555; }
@@ -120,7 +151,13 @@ const MFULL=['','January','February','March','April','May','June','July','August
 const DOWS=['Su','Mo','Tu','We','Th','Fr','Sa'];
 const DOWF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const TODAY_M=5,TODAY_D=11;
-const TYPES={birthday:{color:'#D85A30',label:'Birthday'},holiday:{color:'#BA7517',label:'Holiday'},travel:{color:'#7F77DD',label:'Travel'},party:{color:'#1D9E75',label:'Party'},personal:{color:'#378ADD',label:'Personal'}};
+const TYPES={
+  birthday:{color:'#D85A30',label:'Birthday'},
+  holiday:{color:'#BA7517',label:'Holiday'},
+  travel:{color:'#7F77DD',label:'Travel'},
+  party:{color:'#1D9E75',label:'Party'},
+  personal:{color:'#378ADD',label:'Personal'}
+};
 
 const builtIn=[
   {id:'b1',month:5,day:11,title:"Mason's Birthday",type:'birthday'},
@@ -153,21 +190,29 @@ function getEvs(m,d){return allEvents().filter(e=>e.month===m&&e.day===d);}
 function getDow(dow1,d){return(dow1+d-1)%7;}
 function setSyncTag(text,cls){const t=document.getElementById('sync-tag');t.textContent=text;t.className='sync-tag'+(cls?' '+cls:'');}
 
+// Legend
 const legEl=document.getElementById('legend');
 ['birthday','holiday','travel','party','personal'].forEach(t=>{
   legEl.innerHTML+=`<span class="leg-item"><span class="leg-dot" style="background:${TYPES[t].color}"></span>${TYPES[t].label}</span>`;
 });
 
+// Build grid
 const cal=document.getElementById('cal');
 const cellMap={};
 const hlabel=document.createElement('div');
 hlabel.className='h-label';hlabel.textContent='—';
 cal.appendChild(hlabel);
-for(let d=1;d<=31;d++){const h=document.createElement('div');h.className='h-day'+([0,6].includes(d%7)?' wknd':'');h.textContent=String(d).padStart(2,'0');cal.appendChild(h);}
+for(let d=1;d<=31;d++){
+  const h=document.createElement('div');
+  h.className='h-day'+([0,6].includes(d%7)?' wknd':'');
+  h.textContent=String(d).padStart(2,'0');
+  cal.appendChild(h);
+}
 
 let selCell=null,activeM=null,activeD=null;
 MONTHS.forEach(month=>{
-  const ml=document.createElement('div');ml.className='m-label';
+  const ml=document.createElement('div');
+  ml.className='m-label';
   ml.innerHTML=`<span class="m-name">${month.name}</span><span class="m-meta">${month.days}d</span>`;
   cal.appendChild(ml);
   for(let d=1;d<=31;d++){
@@ -179,17 +224,39 @@ MONTHS.forEach(month=>{
     if(isE)cls+=' empty';else if(isT)cls+=' today';else if(isW)cls+=' wknd';
     if(isP&&!isE&&!isT)cls+=' past';
     cell.className=cls;
-    if(!isE){cellMap[`${month.num}-${d}`]={el:cell,dow,isT};renderCell(cell,month.num,d,dow,isT);cell.addEventListener('click',()=>openPanel(month.num,d,dow,cell));}
+    if(!isE){
+      cellMap[`${month.num}-${d}`]={el:cell,dow,isT};
+      renderCell(cell,month.num,d,dow,isT);
+      cell.addEventListener('click',()=>openPanel(month.num,d,dow,cell));
+    }
     cal.appendChild(cell);
   }
 });
 
 function renderCell(cell,m,d,dow,isT){
   const evs=getEvs(m,d);
-  const dots=evs.map(e=>`<span class="dot" style="background:${TYPES[e.type]?.color||'#aaa'}"></span>`).join('');
-  cell.innerHTML=`${isT?'<span class="today-pip"></span>':''}<span class="dn">${d}</span><span class="dw">${DOWS[dow]}</span><div class="dots">${dots}</div>`;
+  // Build event label pills — one per event, text truncated to fit
+  const labels=evs.map(e=>{
+    const color=TYPES[e.type]?.color||'#aaa';
+    return`<span class="ev-label" style="background:${color}" title="${e.title}">${e.title}</span>`;
+  }).join('');
+  cell.innerHTML=`
+    ${isT?'<span class="today-pip"></span>':''}
+    <div class="day-top">
+      <span class="dn">${d}</span>
+      <span class="dw">${DOWS[dow]}</span>
+    </div>
+    <div class="ev-labels">${labels}</div>`;
 }
-function refreshAllCells(){MONTHS.forEach(month=>{for(let d=1;d<=month.days;d++){const key=`${month.num}-${d}`;if(cellMap[key]){const{el,dow,isT}=cellMap[key];renderCell(el,month.num,d,dow,isT);}}});}
+
+function refreshAllCells(){
+  MONTHS.forEach(month=>{
+    for(let d=1;d<=month.days;d++){
+      const key=`${month.num}-${d}`;
+      if(cellMap[key]){const{el,dow,isT}=cellMap[key];renderCell(el,month.num,d,dow,isT);}
+    }
+  });
+}
 
 function openPanel(m,d,dow,cell){
   if(selCell)selCell.classList.remove('selected');
