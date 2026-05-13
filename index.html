@@ -303,9 +303,10 @@ async function saveEvent(){
   const type=document.getElementById('ev-type').value;
   document.getElementById('btn-save').disabled=true;
   setSyncTag('saving…','syncing');
-  const{data,error}=await sb.from('events').insert({month:activeM,day:activeD,title,type}).select().single();
+  const{error}=await sb.from('events').insert({month:activeM,day:activeD,title,type});
+if(error){setSyncTag('error saving','error');document.getElementById('btn-save').disabled=false;return;}
+await loadEvents();
   if(error){setSyncTag('error saving','error');document.getElementById('btn-save').disabled=false;return;}
-  if(data){userEvents.push(data);}else{await loadEvents();}
   const key=`${activeM}-${activeD}`;
   if(cellMap[key]){const{el,dow,isT}=cellMap[key];renderCell(el,activeM,activeD,dow,isT);}
   refreshEventList();cancelForm();
